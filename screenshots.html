@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Fundd | Screenshot Monitor</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f172a;--surface:#1e293b;--surface2:#263548;--border:#334155;
+  --text:#f1f5f9;--muted:#94a3b8;--primary:#6366f1;--primary-h:#818cf8;
+  --success:#22c55e;--warning:#f59e0b;--danger:#ef4444;
+  --radius:10px;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
+
+/* ââ HEADER ââ */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);
+  padding:14px 24px;display:flex;align-items:center;gap:14px}
+.topbar img{height:32px}
+.topbar h1{font-size:1.05rem;font-weight:700;color:var(--text)}
+.topbar p{font-size:.78rem;color:var(--muted);margin-top:1px}
+
+/* ââ AUTH SCREEN ââ */
+#authPage{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 62px)}
+.auth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:36px 32px;width:320px;text-align:center}
+.auth-card h2{font-size:1.1rem;margin-bottom:6px}
+.auth-card p{font-size:.82rem;color:var(--muted);margin-bottom:22px}
+.auth-card input{width:100%;padding:10px 14px;border-radius:8px;border:1px solid var(--border);
+  background:var(--surface2);color:var(--text);font-size:1rem;letter-spacing:4px;
+  text-align:center;margin-bottom:14px;outline:none}
+.auth-card input:focus{border-color:var(--primary)}
+.btn{padding:10px 22px;border-radius:8px;border:none;cursor:pointer;
+  font-size:.88rem;font-weight:600;transition:background .15s}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-h)}
+.err{color:var(--danger);font-size:.8rem;margin-top:8px;display:none}
+
+/* ââ MAIN ââ */
+#mainPage{display:none;padding:24px}
+
+/* ââ FILTERS ââ */
+.filters{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:16px 20px;margin-bottom:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.filter-group{display:flex;flex-direction:column;gap:5px}
+.filter-group label{font-size:.75rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.filter-group select,.filter-group input{
+  padding:8px 12px;border-radius:8px;border:1px solid var(--border);
+  background:var(--surface2);color:var(--text);font-size:.85rem;outline:none;min-width:160px}
+.filter-group select:focus,.filter-group input:focus{border-color:var(--primary)}
+.filter-actions{display:flex;gap:8px;align-items:flex-end;margin-left:auto}
+
+/* ââ STATS ROW ââ */
+.stats{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:14px 20px;flex:1;min-width:140px}
+.stat .val{font-size:1.6rem;font-weight:700;line-height:1}
+.stat .lbl{font-size:.75rem;color:var(--muted);margin-top:4px}
+.stat.warn .val{color:var(--warning)}
+.stat.good .val{color:var(--success)}
+
+/* ââ GRID ââ */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  overflow:hidden;transition:transform .15s,border-color .15s}
+.card:hover{transform:translateY(-2px);border-color:var(--primary)}
+.card.off-task{border-color:var(--warning)}
+.card-img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:var(--surface2);cursor:pointer}
+.card-img:hover{opacity:.9}
+.card-body{padding:12px 14px}
+.card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.card-email{font-size:.8rem;font-weight:600;color:var(--text)}
+.tag{display:inline-block;padding:2px 9px;border-radius:12px;font-size:.7rem;font-weight:700}
+.tag-approved{background:#166534;color:#86efac}
+.tag-offtask{background:#78350f;color:#fcd34d}
+.card-url{font-size:.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
+.card-time{font-size:.72rem;color:var(--muted)}
+
+/* ââ EMPTY / LOADING ââ */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty h3{font-size:1.1rem;margin-bottom:8px;color:var(--text)}
+.loader{display:inline-block;width:32px;height:32px;border:3px solid var(--border);
+  border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:12px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ââ LIGHTBOX ââ */
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;
+  align-items:center;justify-content:center;flex-direction:column}
+#lb.open{display:flex}
+#lb img{max-width:92vw;max-height:88vh;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.6)}
+#lb-close{position:absolute;top:16px;right:20px;font-size:1.8rem;color:#fff;cursor:pointer;
+  background:none;border:none;line-height:1}
+#lb-meta{color:#e2e8f0;font-size:.82rem;margin-top:12px;text-align:center;max-width:700px}
+
+/* ââ TOAST ââ */
+#toast{position:fixed;bottom:24px;right:24px;background:var(--surface2);border:1px solid var(--border);
+  color:var(--text);padding:12px 20px;border-radius:8px;font-size:.85rem;
+  transition:opacity .3s;opacity:0;pointer-events:none;z-index:2000}
+#toast.show{opacity:1}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <img src="https://fundd.com.au/wp-content/uploads/2024/08/White-logo.svg" onerror="this.style.display='none'" alt="Fundd"/>
+  <div>
+    <h1>Screenshot Monitor</h1>
+    <p>Contractor activity review</p>
+  </div>
+</div>
+
+<!-- AUTH -->
+<div id="authPage">
+  <div class="auth-card">
+    <h2>Admin Access</h2>
+    <p>Enter your admin PIN to view screenshots</p>
+    <input type="password" id="pinInput" maxlength="10" placeholder="PIN"
+           onkeydown="if(event.key==='Enter')checkPin()"/>
+    <br/>
+    <button class="btn btn-primary" onclick="checkPin()">Enter</button>
+    <div class="err" id="pinErr">Incorrect PIN</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="mainPage">
+  <!-- Filters -->
+  <div class="filters">
+    <div class="filter-group">
+      <label>Contractor</label>
+      <select id="fEmail" onchange="load()"><option value="">All contractors</option></select>
+    </div>
+    <div class="filter-group">
+      <label>Period</label>
+      <select id="fPeriod" onchange="load()">
+        <option value="today">Today</option>
+        <option value="week" selected>This week</option>
+        <option value="month">This month</option>
+        <option value="all">All time</option>
+      </select>
+    </div>
+    <div class="filter-group">
+      <label>Status</label>
+      <select id="fStatus" onchange="load()">
+        <option value="">All</option>
+        <option value="approved">Approved sites only</option>
+        <option value="offtask">Off-task only</option>
+      </select>
+    </div>
+    <div class="filter-actions">
+      <button class="btn btn-primary" onclick="load()">Refresh</button>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat" id="statTotal"><div class="val" id="statTotalVal">â</div><div class="lbl">Total captures</div></div>
+    <div class="stat good" id="statApproved"><div class="val" id="statApprovedVal">â</div><div class="lbl">Approved sites</div></div>
+    <div class="stat warn" id="statOff"><div class="val" id="statOffVal">â</div><div class="lbl">Off-task captures</div></div>
+    <div class="stat" id="statContractors"><div class="val" id="statContractorsVal">â</div><div class="lbl">Active contractors</div></div>
+  </div>
+
+  <!-- Grid -->
+  <div id="grid" class="grid">
+    <div class="empty">
+      <div class="loader"></div>
+      <h3>Loading screenshotsâ¦</h3>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div id="lb">
+  <button id="lb-close" onclick="closeLb()">&times;</button>
+  <img id="lb-img" src="" alt=""/>
+  <div id="lb-meta"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ââ CONFIG ââ
+const SUPABASE_URL = 'https://aqbzwwaykyxnrraocknc.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxYnp3d2F5a3l4bnJyYW9ja25jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNDM0NDUsImV4cCI6MjA5MTcxOTQ0NX0.iKRmZz4MU3o2aE8pl8tGIsHIKPnPe2y9MUdReTApNvg';
+const ADMIN_PIN    = '1234';
+
+// ââ AUTH ââ
+function checkPin() {
+  const pin = document.getElementById('pinInput').value.trim();
+  if (pin === ADMIN_PIN) {
+    document.getElementById('authPage').style.display = 'none';
+    document.getElementById('mainPage').style.display = 'block';
+    sessionStorage.setItem('fm_auth', '1');
+    load();
+    loadContractors();
+  } else {
+    const err = document.getElementById('pinErr');
+    err.style.display = 'block';
+    setTimeout(() => err.style.display = 'none', 2500);
+  }
+}
+
+// ââ SUPABASE FETCH ââ
+async function sbFetch(path) {
+  const r = await fetch(SUPABASE_URL + path, {
+    headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
+  });
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+// ââ LOAD CONTRACTORS FOR FILTER ââ
+async function loadContractors() {
+  try {
+    const rows = await sbFetch('/rest/v1/screenshots?select=email&order=email');
+    const emails = [...new Set(rows.map(r => r.email))].sort();
+    const sel = document.getElementById('fEmail');
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">All contractors</option>' +
+      emails.map(e => `<option value="${e}"${e===cur?' selected':''}>${e}</option>`).join('');
+  } catch(e) { /* silent */ }
+}
+
+// ââ DATE HELPERS ââ
+function periodFilter() {
+  const p = document.getElementById('fPeriod').value;
+  const now = new Date();
+  if (p === 'today') {
+    const d = now.toISOString().split('T')[0];
+    return `&captured_at=gte.${d}T00:00:00`;
+  }
+  if (p === 'week') {
+    const day = now.getDay(), diff = day === 0 ? -6 : 1 - day;
+    const mon = new Date(now); mon.setDate(now.getDate() + diff); mon.setHours(0,0,0,0);
+    return `&captured_at=gte.${mon.toISOString()}`;
+  }
+  if (p === 'month') {
+    const start = new Date(now.getFullYear(), now.getMonth(), 1);
+    return `&captured_at=gte.${start.toISOString()}`;
+  }
+  return '';
+}
+
+// ââ LOAD SCREENSHOTS ââ
+async function load() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '<div class="empty"><div class="loader"></div><h3>Loadingâ¦</h3></div>';
+
+  try {
+    const email  = document.getElementById('fEmail').value;
+    const status = document.getElementById('fStatus').value;
+
+    let qs = '/rest/v1/screenshots?select=*&order=captured_at.desc&limit=200';
+    if (email)            qs += `&email=eq.${encodeURIComponent(email)}`;
+    if (status==='approved') qs += '&approved_site=eq.true';
+    if (status==='offtask')  qs += '&approved_site=eq.false';
+    qs += periodFilter();
+
+    const rows = await sbFetch(qs);
+
+    // Stats
+    const total       = rows.length;
+    const approved    = rows.filter(r => r.approved_site).length;
+    const offTask     = rows.filter(r => !r.approved_site).length;
+    const contractors = new Set(rows.map(r => r.email)).size;
+    document.getElementById('statTotalVal').textContent     = total;
+    document.getElementById('statApprovedVal').textContent  = approved;
+    document.getElementById('statOffVal').textContent       = offTask;
+    document.getElementById('statContractorsVal').textContent = contractors;
+
+    if (!rows.length) {
+      grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><h3>No screenshots found</h3><p>Captures appear here after contractors\' browsers fire the random timer (10â20 min interval).</p></div>';
+      return;
+    }
+
+    grid.innerHTML = rows.map(r => {
+      const ts   = new Date(r.captured_at).toLocaleString('en-AU');
+      const host = (() => { try { return new URL(r.url).hostname; } catch { return r.url||''; } })();
+      const tag  = r.approved_site
+        ? '<span class="tag tag-approved">Approved</span>'
+        : '<span class="tag tag-offtask">Off-task</span>';
+      return `
+        <div class="card ${r.approved_site ? '' : 'off-task'}">
+          <img class="card-img" src="${r.image_url}" alt="screenshot"
+               loading="lazy" onclick="openLb('${r.image_url}','${esc(r.email)}','${esc(ts)}','${esc(r.url||'')}')"/>
+          <div class="card-body">
+            <div class="card-top">
+              <span class="card-email">${esc(r.email)}</span>
+              ${tag}
+            </div>
+            <div class="card-url" title="${esc(r.url||'')}">${esc(host)}</div>
+            <div class="card-time">${ts}</div>
+          </div>
+        </div>`;
+    }).join('');
+
+  } catch(err) {
+    grid.innerHTML = `<div class="empty" style="grid-column:1/-1"><h3>Error loading data</h3><p>${esc(err.message)}</p></div>`;
+  }
+}
+
+// ââ LIGHTBOX ââ
+function openLb(url, email, ts, pageUrl) {
+  document.getElementById('lb-img').src  = url;
+  document.getElementById('lb-meta').textContent = `${email}  |  ${ts}  |  ${pageUrl}`;
+  document.getElementById('lb').classList.add('open');
+}
+function closeLb() {
+  document.getElementById('lb').classList.remove('open');
+  document.getElementById('lb-img').src = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+// ââ UTILS ââ
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+// ââ BOOT ââ
+window.addEventListener('DOMContentLoaded', () => {
+  if (sessionStorage.getItem('fm_auth') === '1') {
+    document.getElementById('authPage').style.display = 'none';
+    document.getElementById('mainPage').style.display = 'block';
+    load();
+    loadContractors();
+  }
+});
+</script>
+</body>
+</html>
