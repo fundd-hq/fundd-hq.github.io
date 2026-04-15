@@ -996,7 +996,7 @@ function initInvoice(){
 // 
 function onPeriodChange(){
   const val=document.getElementById('invPeriodSel').value;
-  const custom?val==='custom';
+  const custom=val==='custom';
   document.getElementById('invDateFrom').style.display=custom?'block':'none';
   document.getElementById('invDateTo').style.display=custom?'block':'none';
   if(!custom) buildInvoiceLines();
@@ -1439,7 +1439,7 @@ function renderAdminSummary(){
     const mine=all.filter(s=>s.email===email);
     const total=mine.reduce((a,s)=>a+s.durationMs,0);
     const last=mine.reduce((l,s)=>(!l||new Date(s.clockOut)>new Date(l))?s.clockOut:l,null);
-    const myInv=invAll.filter(i=>i.qmail===email);
+    const myInv=invAll.filter(i=>i.email===email);
     const invSummary=myInv.length ? `${myInv.length} (${myInv.filter(i=>i.status==='submitted').length} pending)` : '0';
     return `<tr><td><strong>${nameFrom(email)}</strong></td><td style="color:var(--muted);font-size:.82rem;">${email}</td><td>${mine.length}</td><td><strong>${msToHM(total)}</strong></td><td>${invSummary}</td><td style="font-size:.82rem;color:var(--muted);">${last?new Date(last).toLocaleDateString('en-AU'):'-'}</td></tr>`;
   }).join('');
