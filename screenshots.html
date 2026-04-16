@@ -14,14 +14,14 @@
 }
 body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
 
-/* ââ HEADER ââ */
+/* ── HEADER ── */
 .topbar{background:var(--surface);border-bottom:1px solid var(--border);
   padding:14px 24px;display:flex;align-items:center;gap:14px}
 .topbar img{height:32px}
 .topbar h1{font-size:1.05rem;font-weight:700;color:var(--text)}
 .topbar p{font-size:.78rem;color:var(--muted);margin-top:1px}
 
-/* ââ AUTH SCREEN ââ */
+/* ── AUTH SCREEN ── */
 #authPage{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 62px)}
 .auth-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
   padding:36px 32px;width:320px;text-align:center}
@@ -37,10 +37,10 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .btn-primary:hover{background:var(--primary-h)}
 .err{color:var(--danger);font-size:.8rem;margin-top:8px;display:none}
 
-/* ââ MAIN ââ */
+/* ── MAIN ── */
 #mainPage{display:none;padding:24px}
 
-/* ââ FILTERS ââ */
+/* ── FILTERS ── */
 .filters{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
   padding:16px 20px;margin-bottom:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
 .filter-group{display:flex;flex-direction:column;gap:5px}
@@ -51,7 +51,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .filter-group select:focus,.filter-group input:focus{border-color:var(--primary)}
 .filter-actions{display:flex;gap:8px;align-items:flex-end;margin-left:auto}
 
-/* ââ STATS ROW ââ */
+/* ── STATS ROW ── */
 .stats{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
   padding:14px 20px;flex:1;min-width:140px}
@@ -60,7 +60,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .stat.warn .val{color:var(--warning)}
 .stat.good .val{color:var(--success)}
 
-/* ââ GRID ââ */
+/* ── GRID ── */
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
   overflow:hidden;transition:transform .15s,border-color .15s}
@@ -71,20 +71,20 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 .card-body{padding:12px 14px}
 .card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
 .card-email{font-size:.8rem;font-weight:600;color:var(--text)}
-.tag{display:inline-block;padding:2px 9px;border-radius:12px;font-size:.7rem;font-weight:700}
+.tag{display:inline-block;padding:2px 9px;border-radius:12px;font-size:.trem;font-weight:700}
 .tag-approved{background:#166534;color:#86efac}
 .tag-offtask{background:#78350f;color:#fcd34d}
 .card-url{font-size:.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px}
 .card-time{font-size:.72rem;color:var(--muted)}
 
-/* ââ EMPTY / LOADING ââ */
+/* ── EMPTY / LOADING ── */
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty h3{font-size:1.1rem;margin-bottom:8px;color:var(--text)}
 .loader{display:inline-block;width:32px;height:32px;border:3px solid var(--border);
   border-top-color:var(--primary);border-radius:50%;animation:spin .7s linear infinite;margin-bottom:12px}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* ââ LIGHTBOX ââ */
+/* ── LIGHTBOX ── */
 #lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;
   align-items:center;justify-content:center;flex-direction:column}
 #lb.open{display:flex}
@@ -93,7 +93,7 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
   background:none;border:none;line-height:1}
 #lb-meta{color:#e2e8f0;font-size:.82rem;margin-top:12px;text-align:center;max-width:700px}
 
-/* ââ TOAST ââ */
+/* ── TOAST ── */
 #toast{position:fixed;bottom:24px;right:24px;background:var(--surface2);border:1px solid var(--border);
   color:var(--text);padding:12px 20px;border-radius:8px;font-size:.85rem;
   transition:opacity .3s;opacity:0;pointer-events:none;z-index:2000}
@@ -155,17 +155,17 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 
   <!-- Stats -->
   <div class="stats">
-    <div class="stat" id="statTotal"><div class="val" id="statTotalVal">â</div><div class="lbl">Total captures</div></div>
-    <div class="stat good" id="statApproved"><div class="val" id="statApprovedVal">â</div><div class="lbl">Approved sites</div></div>
-    <div class="stat warn" id="statOff"><div class="val" id="statOffVal">â</div><div class="lbl">Off-task captures</div></div>
-    <div class="stat" id="statContractors"><div class="val" id="statContractorsVal">â</div><div class="lbl">Active contractors</div></div>
+    <div class="stat" id="statTotal"><div class="val" id="statTotalVal">—</div><div class="lbl">Total captures</div></div>
+    <div class="stat good" id="statApproved"><div class="val" id="statApprovedVal">—</div><div class="lbl">Approved sites</div></div>
+    <div class="stat warn" id="statOff"><div class="val" id="statOffVal">—</div><div class="lbl">Off-task captures</div></div>
+    <div class="stat" id="statContractors"><div class="val" id="statContractorsVal">—</div><div class="lbl">Active contractors</div></div>
   </div>
 
   <!-- Grid -->
   <div id="grid" class="grid">
     <div class="empty">
       <div class="loader"></div>
-      <h3>Loading screenshotsâ¦</h3>
+      <h3>Loading screenshots...</h3>
     </div>
   </div>
 </div>
@@ -180,12 +180,12 @@ body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,san
 <div id="toast"></div>
 
 <script>
-// ââ CONFIG ââ
+// ── CONFIG ──
 const SUPABASE_URL = 'https://aqbzwwaykyxnrraocknc.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxYnp3d2F5a3l4bnJyYW9ja25jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNDM0NDUsImV4cCI6MjA5MTcxOTQ0NX0.iKRmZz4MU3o2aE8pl8tGIsHIKPnPe2y9MUdReTApNvg';
 const ADMIN_PIN    = '1234';
 
-// ââ AUTH ââ
+// ── AUTH ──
 function checkPin() {
   const pin = document.getElementById('pinInput').value.trim();
   if (pin === ADMIN_PIN) {
@@ -201,7 +201,7 @@ function checkPin() {
   }
 }
 
-// ââ SUPABASE FETCH ââ
+// ── SUPABASE FETCH ──
 async function sbFetch(path) {
   const r = await fetch(SUPABASE_URL + path, {
     headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY }
@@ -210,7 +210,7 @@ async function sbFetch(path) {
   return r.json();
 }
 
-// ââ LOAD CONTRACTORS FOR FILTER ââ
+// ── LOAD CONTRACTORS FOR FILTER ──
 async function loadContractors() {
   try {
     const rows = await sbFetch('/rest/v1/screenshots?select=email&order=email');
@@ -222,7 +222,7 @@ async function loadContractors() {
   } catch(e) { /* silent */ }
 }
 
-// ââ DATE HELPERS ââ
+// ── DATE HELPERS ──
 function periodFilter() {
   const p = document.getElementById('fPeriod').value;
   const now = new Date();
@@ -242,10 +242,10 @@ function periodFilter() {
   return '';
 }
 
-// ââ LOAD SCREENSHOTS ââ
+// ── LOAD SCREENSHOTS ──
 async function load() {
   const grid = document.getElementById('grid');
-  grid.innerHTML = '<div class="empty"><div class="loader"></div><h3>Loadingâ¦</h3></div>';
+  grid.innerHTML = '<div class="empty"><div class="loader"></div><h3>Loading...</h3></div>';
 
   try {
     const email  = document.getElementById('fEmail').value;
@@ -270,7 +270,7 @@ async function load() {
     document.getElementById('statContractorsVal').textContent = contractors;
 
     if (!rows.length) {
-      grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><h3>No screenshots found</h3><p>Captures appear here after contractors\' browsers fire the random timer (10â20 min interval).</p></div>';
+      grid.innerHTML = '<div class="empty" style="grid-column:1/-1"><h3>No screenshots found</h3><p>Captures appear here after contractors\' browsers fire the random timer (10-20 min interval).</p></div>';
       return;
     }
 
@@ -300,7 +300,7 @@ async function load() {
   }
 }
 
-// ââ LIGHTBOX ââ
+// ── LIGHTBOX ──
 function openLb(url, email, ts, pageUrl) {
   document.getElementById('lb-img').src  = url;
   document.getElementById('lb-meta').textContent = `${email}  |  ${ts}  |  ${pageUrl}`;
@@ -312,7 +312,7 @@ function closeLb() {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
 
-// ââ UTILS ââ
+// ── UTILS ──
 function esc(s) {
   return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
@@ -322,7 +322,7 @@ function showToast(msg) {
   setTimeout(() => t.classList.remove('show'), 3000);
 }
 
-// ââ BOOT ââ
+// ── BOOT ──
 window.addEventListener('DOMContentLoaded', () => {
   if (sessionStorage.getItem('fm_auth') === '1') {
     document.getElementById('authPage').style.display = 'none';
