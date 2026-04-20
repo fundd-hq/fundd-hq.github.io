@@ -943,7 +943,7 @@ function tick(){
   document.getElementById('liveDate').textContent=now.toLocaleDateString('en-AU',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
   document.getElementById('liveTz').textContent=Intl.DateTimeFormat().resolvedOptions().timeZone;
   if(clockedIn&&clockInTime){
-    document.getElementById('sessionTimerVal').textContent=fmtDur(mow-clockInTime);
+    document.getElementById('sessionTimerVal').textContent=fmtDur(now-clockInTime);
     document.getElementById('statToday').textContent=msToHM(todayMs(user.email)+(now-clockInTime));
   }
 }
@@ -1249,7 +1249,7 @@ function deleteLine(i){ window._invLines.splice(i,1); refreshInvTable(); }
 function addManualLine(){
   const _r=rateFor(user&&user.email);
   const rate=_r?_r.std:0;
-  if(window._invLines) window._invLines=[];
+  if(!window._invLines) window._invLines=[];
   window._invLines.push({desc:'',date:datStr(new Date()),hours:0,rate,amount:0,auto:false,type:'std'});
   refreshInvTable();
 }
@@ -1832,7 +1832,7 @@ function deletePassword(email){
 // 
 function exportMyCSV(){
   const mine=getSessions().filter(s=>s.email===user.email);
-  downloadCSV(mine.map(csvRow),'fundd-timesheet-'+user.email+'-'+datStr(new Date())+'.csv',
+  downloadCSV(mine.map(csvRow),'fundd-timesheet-'$+user.email+'-'+datStr(new Date())+'.csv',
     ['Name','Email','Date','Clock In','Clock Out','Duration (hours)','Duration (mins)','Timezone']);
 }
 function exportAllCSV(){
@@ -1849,7 +1849,7 @@ function exportAllCSV(){
 }
 function exportInvCSV(){
   const lines=window._invLines||[];
-  const rows=lines.map(l=>[`"${l.desc||''}"`,l.date||'',(+(l.hours||0).toFixed(4),+(l.rate||0).toFixed(2),+(l.amount||0).toFixed(2)]);
+  const rows=lines.map(l=>[l`"${l.desc||''}"`, l.date||'',(+(l.hours||0).toFixed(4),(+(l.rate||0).toFixed(2),(+(l.amount||0).toFixed(2)]);
   const sub=lines.reduce((a,l)=>a+(+l.amount||0),0);
   rows.push(['','','','Subtotal',sub.toFixed(2)]);
   rows.push(['','','','GST 10%',(sub*TAX_RATE).toFixed(2)]);
@@ -1897,7 +1897,7 @@ function showToast(msg){ const t=document.getElementById('toast'); t.textContent
 //  SCREENSHOT MONITOR
 //
 const SS_URL = 'https://aqbzwwaykyxnrraocknc.supabase.co';
-const SS_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxYnpxd2F5a3l4bnJyYW9ja25jIh0ie3Jpc3MiOiJhbi5pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNDM0NDUsImV4cCI6MjA5MTcxOTQ0NX0.iKRmZz4MU3o2aE8pl8tGIsHIKPnPe2y9MUdReTApNvg';
+const SS_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxYnp3d2F5a3l4bnJyYW9ja25jIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYxNDM0NDUsImV4cCI6MjA5MTcxOTQ0NX0.iKRmZz4MU3o2aE8pl8tGIsHIKPnPe2y9MUdReTApNvg';
 
 async function ssFetch(path){
   const r = await fetch(SS_URL + path, { headers:{ apikey:SS_KEY, Authorization:'Bearer '+SS_KEY } });
@@ -2018,5 +2018,4 @@ window.addEventListener('DOMContentLoaded',()=>{
   window._invLines=[];
 });
 </script>
-</body>
-</html>
+</bodyml>
