@@ -1832,7 +1832,7 @@ function deletePassword(email){
 // 
 function exportMyCSV(){
   const mine=getSessions().filter(s=>s.email===user.email);
-  downloadCSV(mine.map(csvRow),'fundd-timesheet-'$+user.email+'-'+datStr(new Date())+'.csv',
+  downloadCSV(mine.map(csvRow),'fundd-timesheet-'+user.email+'-'+datStr(new Date())+'.csv',
     ['Name','Email','Date','Clock In','Clock Out','Duration (hours)','Duration (mins)','Timezone']);
 }
 function exportAllCSV(){
@@ -1849,7 +1849,7 @@ function exportAllCSV(){
 }
 function exportInvCSV(){
   const lines=window._invLines||[];
-  const rows=lines.map(l=>[l`"${l.desc||''}"`, l.date||'',(+(l.hours||0).toFixed(4),(+(l.rate||0).toFixed(2),(+(l.amount||0).toFixed(2)]);
+  const rows=lines.map(l=>[`"${l.desc||''}"`,l.date||'',+(l.hours||0).toFixed(4),+(l.rate||0).toFixed(2),+(l.amount||0).toFixed(2)]);
   const sub=lines.reduce((a,l)=>a+(+l.amount||0),0);
   rows.push(['','','','Subtotal',sub.toFixed(2)]);
   rows.push(['','','','GST 10%',(sub*TAX_RATE).toFixed(2)]);
@@ -2018,4 +2018,5 @@ window.addEventListener('DOMContentLoaded',()=>{
   window._invLines=[];
 });
 </script>
-</bodyml>
+</body>
+</html>
